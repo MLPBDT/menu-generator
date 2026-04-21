@@ -4,6 +4,9 @@ export default async function handler(req, res) {
   }
   try {
     const { messages } = req.body;
+    
+    console.log("MESSAGES REÇUS:", JSON.stringify(messages));
+    
     const response = await fetch("https://api.groq.com/openai/v1/chat/completions", {
       method: "POST",
       headers: {
@@ -16,16 +19,16 @@ export default async function handler(req, res) {
         messages: messages
       })
     });
-    const data = await response.json();
-    const text = data.choices && data.choices[0] && data.choices[0].message
-      ? data.choices[0].message.content
-      : "";
     
-    // Log pour voir ce que Groq renvoie vraiment
-    console.log("GROQ RAW RESPONSE:", text);
+    const data = await response.json();
+    console.log("GROQ FULL RESPONSE:", JSON.stringify(data));
+    
+    const text = data.choices?.[0]?.message?.content || "";
+    console.log("GROQ TEXT:", text);
     
     return res.status(200).json({ content: [{ text: text }] });
   } catch (err) {
+    console.log("ERREUR:", err.message);
     return res.status(500).json({ error: err.message });
   }
 }

@@ -195,17 +195,22 @@ export default function App() {
     return parts.length > 0 ? "\n\nINSPIRATION / CHARTE GRAPHIQUE :\n" + parts.join("\n") : "";
   };
 
-  const generateTheme = async (menuData, styleLabel, toneLabel) => {
-    const inspoContext = buildInspoContext();
-    const imageContent = [];
+ const generateTheme = async (menuData, styleLabel, toneLabel) => {
+  const inspoContext = buildInspoContext();
 
-    if (inspoMode === "custom" && inspoImage) {
-      imageContent.push({
-        type: "image_url",
-        image_url: { url: `data:image/jpeg;base64,${inspoImage.base64}` }
-      });
-    }
+  const themePrompt = `Crée un thème visuel unique pour ce restaurant :
+Nom : "${restaurantName}"
+Style cuisine : ${styleLabel} | Ton : ${toneLabel}
+${inspoContext}
 
+JSON (valeurs CSS valides uniquement) :
+{"themeName":"nom du thème","bg":"#hex","bgCard":"#hex","accent":"#hex","accentSoft":"#hex","textMain":"#hex","textSub":"#hex","textFaint":"#hex","borderColor":"#hex","borderStyle":"1px solid","fontDisplay":"Georgia, serif","fontBody":"Georgia, serif","titleWeight":"normal","titleSpacing":"0.2em","dishWeight":"normal","priceWeight":"normal","radius":"0px","shadow":"none","logoChar":"emoji","headerOrnament":"― ✦ ―","sectionDivider":"· · ·"}`;
+
+  return await callAPI([
+    { role: "system", content: "Tu es un directeur artistique expert. Réponds UNIQUEMENT en JSON valide, sans markdown, sans backticks. Commence par { et termine par }." },
+    { role: "user", content: themePrompt },
+  ]);
+};
     const themePrompt = `Crée un thème visuel unique pour ce restaurant :
 Nom : "${restaurantName}"
 Style cuisine : ${styleLabel} | Ton : ${toneLabel}

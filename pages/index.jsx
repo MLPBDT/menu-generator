@@ -211,49 +211,7 @@ JSON (valeurs CSS valides uniquement) :
     { role: "user", content: themePrompt },
   ]);
 };
-    const themePrompt = `Crée un thème visuel unique pour ce restaurant :
-Nom : "${restaurantName}"
-Style cuisine : ${styleLabel} | Ton : ${toneLabel}
-${inspoContext}
-
-${inspoImage ? "Analyse l'image fournie et inspire-toi de ses couleurs et son ambiance." : ""}
-
-Génère un thème cohérent avec la charte ou l'inspiration fournie.
-
-JSON (valeurs CSS valides uniquement) :
-{
-  "themeName": "nom du thème",
-  "bg": "#hex fond page",
-  "bgCard": "#hex fond carte",
-  "accent": "#hex accent principal",
-  "accentSoft": "#hex accent doux",
-  "textMain": "#hex texte principal",
-  "textSub": "#hex texte secondaire",
-  "textFaint": "#hex texte discret",
-  "borderColor": "#hex bordures",
-  "borderStyle": "1px solid",
-  "fontDisplay": "Georgia, serif",
-  "fontBody": "Georgia, serif",
-  "titleWeight": "normal",
-  "titleSpacing": "0.2em",
-  "dishWeight": "normal",
-  "priceWeight": "normal",
-  "radius": "0px",
-  "shadow": "none",
-  "logoChar": "emoji représentant le restaurant",
-  "headerOrnament": "ornement décoratif ex: ― ✦ ―",
-  "sectionDivider": "séparateur ex: · · ·"
-}`;
-
-    const userContent = inspoImage
-      ? [{ type: "text", text: themePrompt }, { type: "image_url", image_url: { url: `data:image/jpeg;base64,${inspoImage.base64}` } }]
-      : themePrompt;
-
-    return await callAPI([
-      { role: "system", content: "Tu es un directeur artistique expert en design de menus de restaurant. Réponds UNIQUEMENT en JSON valide, sans markdown, sans backticks. Commence par { et termine par }." },
-      { role: "user", content: userContent },
-    ]);
-  };
+   
 
   const generate = async () => {
     const valid = dishes.filter((d) => d.name.trim());

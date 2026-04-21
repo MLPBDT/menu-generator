@@ -24,7 +24,7 @@ async function callAPI(prompt) {
       messages: [
         {
           role: "system",
-          content: "Tu es un chef cuisinier expert et directeur artistique de menus gastronomiques. Réponds UNIQUEMENT en JSON valide, sans markdown, sans backticks, sans aucun texte avant ou après le JSON.",
+          content: "Tu es un expert en menus de restaurant. Réponds UNIQUEMENT en JSON valide. Pas de markdown, pas de backticks, pas de texte avant ou après. Commence directement par { et termine par }.",
         },
         {
           role: "user",
@@ -36,8 +36,12 @@ async function callAPI(prompt) {
   if (!response.ok) throw new Error("Erreur serveur " + response.status);
   const data = await response.json();
   const raw = data.content?.[0]?.text || "";
-  const clean = raw.replace(/```json|```/g, "").trim();
-  return JSON.parse(clean);
+  
+  // Extraire le JSON même s'il y a du texte autour
+  const match = raw.match(/\{[\s\S]*\}/);
+  if (!match) throw new Error("Réponse invalide : " + raw.slice(0, 100));
+  
+  return JSON.parse(match[0]);
 }
 
 export default function App() {

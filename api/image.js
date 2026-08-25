@@ -7,17 +7,7 @@ export default async function handler(req, res) {
 
   try {
     const { prompt } = req.body;
-    const styleMap = {
-      gastronomique: "elegant fine dining, dark moody atmosphere, candlelight, gold accents, luxury table setting",
-      brasserie: "parisian brasserie, vintage warm tones, zinc counter, bistro atmosphere, natural light",
-      moderne: "minimalist modern restaurant, clean white space, architectural lighting, contemporary design",
-      mediterraneen: "mediterranean terrace, blue and white, sunlight, sea view, fresh herbs and seafood",
-      japonais: "japanese restaurant, zen atmosphere, bamboo, soft light, clean lines, cherry blossom",
-      rustique: "rustic farmhouse restaurant, wooden table, stone, countryside, warm candlelight, local produce",
-    };
-
-    const baseStyle = styleMap[req.body.style] || styleMap.gastronomique;
-    const clean = `${prompt}, ${baseStyle}, professional food photography, high quality, cinematic, no text, no watermark`;
+    const clean = (prompt || "elegant restaurant") + ", high quality, professional photography, no text, no watermark, no logo, no people";
 
     const accountId = process.env.CLOUDFLARE_ACCOUNT_ID;
     const apiToken = process.env.CLOUDFLARE_API_TOKEN;

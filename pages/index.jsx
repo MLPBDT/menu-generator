@@ -347,9 +347,9 @@ export default function App() {
     try {
       setLoadingMsg("Rédaction du menu…");
       const generated = await callGroq(
-        `Restaurant : "${resto.name}"${resto.slogan ? ` — "${resto.slogan}"` : ""}\nStyle visuel : ${t.label}${charteContext}\n\nCarte :\n${dishesList}\n\nPour chaque plat : rédige une description courte et appétissante (1-2 lignes). Si une description est déjà fournie, améliore-la. Crée une tagline poétique et courte pour le restaurant. Conserve les allergènes tels quels.\n\nJSON :\n{"tagline":"...","footerText":"...","sections":[{"nom":"...","emoji":"...","plats":[{"nom":"...","description":"...","prix":"...","allergenes":[]}]}]}`,
-        "Tu es un chef cuisinier expert et rédacteur gastronomique. Réponds UNIQUEMENT en JSON valide, sans markdown, sans backticks. Commence par { et termine par }."
-      );
+  `Restaurant : "${resto.name}"\nStyle : ${t.label}\n\nCarte :\n${dishesList}\n\nPour chaque plat, rédige une courte description appétissante. Crée une tagline poétique.\n\nJSON attendu :\n{"tagline":"...","footerText":"...","sections":[{"nom":"Entrées","emoji":"🌿","plats":[{"nom":"...","description":"...","prix":"...","allergenes":[]}]}]}`,
+  "Tu es un chef cuisinier expert. Réponds UNIQUEMENT en JSON valide. Pas de markdown. Pas de backticks. Commence par { et termine par }."
+);
 
       setLoadingMsg("Génération de l'image d'ambiance…");
       const image = await generateImage(resto.name, themeKey, charte);

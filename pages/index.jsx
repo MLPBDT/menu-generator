@@ -105,9 +105,10 @@ function fileToBase64(file) {
 }
 
 async function callGroq(userMsg, system) {
-  const messages = system
-    ? [{ role: "system", content: system }, { role: "user", content: userMsg }]
-    : [{ role: "user", content: userMsg }];
+  const messages = [
+    { role: "system", content: system || "Réponds UNIQUEMENT en JSON valide. Pas de markdown. Pas de backticks. Commence par { et termine par }." },
+    { role: "user", content: userMsg }
+  ];
   const res = await fetch("/api/generate", {
     method: "POST",
     headers: { "Content-Type": "application/json" },
@@ -117,7 +118,7 @@ async function callGroq(userMsg, system) {
   const data = await res.json();
   const raw = data.content?.[0]?.text || "";
   const match = raw.match(/\{[\s\S]*\}/);
-  if (!match) throw new Error("Réponse invalide");
+  if (!match) throw new Error("Réponse invalide : " + raw.substring(0, 150));
   return JSON.parse(match[0]);
 }
 
